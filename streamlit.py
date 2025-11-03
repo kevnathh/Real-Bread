@@ -2,11 +2,12 @@ import streamlit as st
 import requests
 from funcs import bible_chapters, cleanText
 
-st.title("📖 Bible App by Kelompok StrukDat")
+st.title("Real Bread: A Bible App")
 
 # --- Select Bible version and book ---
+lang = st.selectbox("Pilih bahasa:", ["English", "Indonesia"])
 version = st.selectbox("Pilih versi:", ["ASV", "KJV"])
-book = st.selectbox("Pilih kitab:", ["Matthew", "Mark", "Luke", "John"])
+book = st.selectbox("Pilih kitab:", [x for x in bible_chapters])
 chapter = st.selectbox("Pilih pasal:", [x for x in range(1, bible_chapters[book]+1)])
 
 bookREQ = requests.get(f'https://cdn.jsdelivr.net/gh/wldeh/bible-api/bibles/en-{version.lower()}/books/{book.lower()}/chapters/{chapter}.json')
@@ -18,5 +19,5 @@ try:
         data = bookREQ.json()
         hasil = cleanText(data)
         for i in hasil: i
-except requests.exceptions.RequestException as e:
-    st.error(f"Gagal ambil: {e}")
+except Exception as e:
+    st.error(e)

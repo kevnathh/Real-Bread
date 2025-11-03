@@ -1,3 +1,8 @@
+lang_map = {
+    'English' : 'en',
+    'Indonesia' : 'id'
+}
+
 bible_chapters = {
     # Old Testament
     "Genesis": 50,
@@ -75,6 +80,6 @@ def cleanText(data):
     for i in data['data']:
         verse = i['verse']
         text = i['text']
-        clean = f'[{verse}]{text}'
+        clean = f'[{verse}] {text}'
         ls.append(clean)
     return ls
