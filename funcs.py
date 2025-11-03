@@ -77,9 +77,9 @@ bible_chapters = {
 
 def cleanText(data):
     ls = []
-    for i in data['data']:
+    for i in data['data']['verses']:
         verse = i['verse']
-        text = i['text']
+        text = i['content']
         clean = f'[{verse}] {text}'
         ls.append(clean)
     return ls

@@ -4,7 +4,6 @@ from funcs import bible_chapters, cleanText
 
 st.title("Real Bread: A Bible App")
 
-# --- Select Bible version and book ---
 lang = st.selectbox("Pilih bahasa:", ["English", "Indonesia"])
 version = st.selectbox("Pilih versi:", ["ASV", "KJV"])
 book = st.selectbox("Pilih kitab:", [x for x in bible_chapters])
@@ -19,5 +18,7 @@ try:
         data = bookREQ.json()
         hasil = cleanText(data)
         for i in hasil: i
+
+        data
 except Exception as e:
     st.error(e)
