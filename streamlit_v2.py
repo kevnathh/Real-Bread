@@ -29,6 +29,15 @@ try:
                     st.write(f'###{i[3:]}')
                 else: i
 
+            col1, col2 = st.columns(2)
+            with col1:
+                with st.button('Sebelumnya'):
+                    chapter -= 1
+            with col2:
+                with st.button('Setelahnya'):
+                    chapter += 1
+                
+
         data
 except Exception as e:
     st.error(e)
