@@ -85,17 +85,23 @@ def page_bm(): st.title("Bookmark")
 def page_sv(): st.title("Saved")
 
 def logout():
-    st.session_state['logged_in'] = False
-    st.session_state['username'] = ""
-    st.rerun()
+    for key in list(st.session_state.keys()):
+        del st.session_state[key]
 
+    st.session_state['logged_in'] = False
+    st.rerun()
 if not st.session_state['logged_in']:
     pg = st.navigation([st.Page(login_page, title="Login")], position="hidden")  # <-- pakai login_page dari login.py
     pg.run()
+    st.stop() 
 else:
     st.sidebar.title("Real Bread")
     st.sidebar.write(f"Halo, {st.session_state['username']}")
+    st.sidebar.divider()
     
+    if st.sidebar.button("Logout", key="logout"):
+        logout()
+
     pg = st.navigation({
         "Menu Utama": [
             st.Page(page_read, title="Read Bible"),
@@ -106,7 +112,3 @@ else:
     })
     
     pg.run()
-
-    st.sidebar.divider()
-    if st.sidebar.button("Logout"):
-        logout()
