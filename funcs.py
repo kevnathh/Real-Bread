@@ -148,6 +148,7 @@ kitab = {
     "Yudas": 1,
     "Wahyu": 22
 }
+
 def cleanText(data):
     hasil = []
     if isinstance(data, list):
@@ -192,34 +193,28 @@ def getPassage(book, chapter, passage):
 
 def ask_gemini(prompt):
     api_key = None
+    
+    # 1. Coba ambil dari secrets (jika running lokal dengan secrets.toml atau di cloud)
     try:
         api_key = st.secrets["GEMINI_API_KEY"]
     except:
         pass
     
+    # 2. Jika tidak ada di secrets, coba ambil dari input user di session_state
     if not api_key:
-        api_key = API_KEY_DARURAT
+        api_key = st.session_state.get('user_gemini_key', None)
 
-    if "MASUKKAN" in api_key or not api_key:
-        return "Tolong masukkan API Key di funcs.py baris 6."
+    # 3. Validasi
+    if not api_key:
+        return " **Error:** API Key tidak ditemukan. Masukkan API Key di sidebar atau di `.streamlit/secrets.toml`."
 
-    genai.configure(api_key=api_key)
-
-    models_to_try = [
-        'gemini-2.5-flash'
-    ]
-    
-    error_log = []
-
-    # 3. Looping nyobain satu-satu
-    for model_name in models_to_try:
-        try:
-            model = genai.GenerativeModel(model_name)
-            response = model.generate_content(prompt)
-            return response.text 
-        except Exception as e:
-            error_log.append(f"{model_name}: Gagal")
-            continue
-
-    # Kalau sampai sini berarti SEMUA gagal
-    return f"Maaf, semua model AI gagal diakses. Coba buat API Key baru. Log: {', '.join(error_log)}"
+    try:
+        genai.configure(api_key=api_key)
+        
+        # Gunakan model yang valid (update nama model jika perlu)
+        model = genai.GenerativeModel('gemini-2.5-flash') 
+        response = model.generate_content(prompt)
+        return response.text
+        
+    except Exception as e:
+        return f"eror ai nya {str(e)}"
